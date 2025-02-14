@@ -247,7 +247,7 @@ def executeCommands(channel, action, intensity, IS_NEUTRAL): # function to inter
             print(f"{channel}: {action}")
 
             try:
-                manualTrot(intensity)
+                walkForward(intensity)
                 IS_NEUTRAL = False
 
             except Exception as e:
@@ -270,6 +270,14 @@ def executeCommands(channel, action, intensity, IS_NEUTRAL): # function to inter
         elif action == 'MOVE BACKWARD':
 
             print(f"{channel}: {action}")
+
+            try:
+                #walkBackward(intensity)
+                IS_NEUTRAL = False
+
+            except Exception as e:
+
+                logging.error(f"ERROR (control_logic.py): Failed to move backward in executeCommands: {e}\n")
 
     ##### shift channel 6 #####
 
