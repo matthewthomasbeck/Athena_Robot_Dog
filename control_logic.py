@@ -272,7 +272,7 @@ def executeCommands(channel, action, intensity, IS_NEUTRAL): # function to inter
             print(f"{channel}: {action}")
 
             try:
-                #walkBackward(intensity)
+                walkBackward(intensity)
                 IS_NEUTRAL = False
 
             except Exception as e:
