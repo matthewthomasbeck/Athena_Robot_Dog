@@ -85,25 +85,23 @@ BODY_HEIGHT = 18 # height of robot body from ground to 'shoulder' axis
 ########## INVERSE KINEMATICS ##########
 
 def inverse_kinematics(target_x, target_y):
-    L1 = 10.9  # Upper leg length (mm)
-    L2 = 12.5  # Lower leg length (mm)
 
     d = math.sqrt(target_x ** 2 + target_y ** 2)
 
     # Prevent invalid d values
-    if d > (L1 + L2):
-        d = L1 + L2  # Max reach
+    if d > (FEMUR + TIBIA):
+        d = FEMUR + TIBIA  # Max reach
 
-    if d < abs(L1 - L2):
-        d = abs(L1 - L2)  # Minimum reach
+    if d < abs(FEMUR - TIBIA):
+        d = abs(FEMUR - TIBIA)  # Minimum reach
 
     # Solve for lower leg angle (theta2)
-    cos_theta2 = (L1 ** 2 + L2 ** 2 - d ** 2) / (2 * L1 * L2)
+    cos_theta2 = (FEMUR ** 2 + TIBIA ** 2 - d ** 2) / (2 * FEMUR * TIBIA)
     theta2 = math.acos(cos_theta2)  # In radians
 
     # Solve for upper leg angle (theta1)
     theta1 = math.atan2(target_y, target_x) + math.atan2(
-        L2 * math.sin(theta2), L1 + L2 * math.cos(theta2)
+        TIBIA * math.sin(theta2), FEMUR + TIBIA * math.cos(theta2)
     )
 
     # Convert to degrees
