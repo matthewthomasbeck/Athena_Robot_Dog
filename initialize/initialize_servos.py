@@ -84,31 +84,30 @@ BODY_HEIGHT = 18 # height of robot body from ground to 'shoulder' axis
 
 ########## INVERSE KINEMATICS ##########
 
-def inverse_kinematics(target_x, target_y):
+def inverse_kinematics(target_x, target_y, target_z):
+    # Step 1: Compute Hip Roll (Abduction) Angle
+    hip_roll = math.degrees(math.atan2(target_y, math.sqrt(target_x ** 2 + target_z ** 2)))
 
-    d = math.sqrt(target_x ** 2 + target_y ** 2)
+    # Project foot into the hip-knee plane (XZ)
+    projected_leg_length = math.sqrt(target_x ** 2 + target_z ** 2)
 
-    # Prevent invalid d values
-    if d > (FEMUR + TIBIA):
-        d = FEMUR + TIBIA  # Max reach
+    # Prevent invalid reach values
+    projected_leg_length = max(abs(FEMUR - TIBIA), min(FEMUR + TIBIA, projected_leg_length))
 
-    if d < abs(FEMUR - TIBIA):
-        d = abs(FEMUR - TIBIA)  # Minimum reach
+    # Step 2: Compute Knee Angle (Law of Cosines)
+    cos_knee = (FEMUR ** 2 + TIBIA ** 2 - projected_leg_length ** 2) / (2 * FEMUR * TIBIA)
+    knee_flexion = math.acos(cos_knee)  # Knee angle in radians
 
-    # Solve for lower leg angle (theta2)
-    cos_theta2 = (FEMUR ** 2 + TIBIA ** 2 - d ** 2) / (2 * FEMUR * TIBIA)
-    theta2 = math.acos(cos_theta2)  # In radians
-
-    # Solve for upper leg angle (theta1)
-    theta1 = math.atan2(target_y, target_x) + math.atan2(
-        TIBIA * math.sin(theta2), FEMUR + TIBIA * math.cos(theta2)
+    # Step 3: Compute Hip Flexion Angle
+    hip_flexion = math.atan2(-target_z, target_x) + math.atan2(
+        TIBIA * math.sin(knee_flexion), FEMUR + TIBIA * math.cos(knee_flexion)
     )
 
     # Convert to degrees
-    theta1 = math.degrees(theta1)
-    theta2 = math.degrees(theta2)
+    hip_flexion = math.degrees(hip_flexion)
+    knee_flexion = math.degrees(knee_flexion)
 
-    return theta1, theta2
+    return hip_roll, hip_flexion, knee_flexion
 
 
 ########## CALCULATE INTENSITY ##########
@@ -171,7 +170,7 @@ def setTarget(channel, target, speed, acceleration): # function to set target po
 
 ########## MOVE LEG ##########
 
-def moveLeg(leg_name, target_x, target_y, min_speed, min_acceleration):
+def moveLeg(leg_name, target_x, target_y, target_z, min_speed, min_acceleration):
 
     if leg_name not in LEG_CONFIG:
         logging.error(f"Invalid leg name: {leg_name}")
@@ -180,7 +179,7 @@ def moveLeg(leg_name, target_x, target_y, min_speed, min_acceleration):
     upper_servo_data = LEG_CONFIG[leg_name]['upper']
     lower_servo_data = LEG_CONFIG[leg_name]['lower']
 
-    theta1, theta2 = inverse_kinematics(target_x, target_y)
+    theta1, theta2, theta3 = inverse_kinematics(target_x, target_y, target_z)
 
     # Adjust angles based on the servo's rotation direction
     upper_direction = 1 if upper_servo_data['FULL_FRONT'] > upper_servo_data['FULL_BACK'] else -1
@@ -189,12 +188,12 @@ def moveLeg(leg_name, target_x, target_y, min_speed, min_acceleration):
     # Convert IK angles to servo positions with direction accounted for
     upper_new_pos = (
         upper_servo_data['NEUTRAL']
-        + upper_direction * ((theta1 - 144.79) * (upper_servo_data['FULL_FRONT'] - upper_servo_data['FULL_BACK']) / 90) # 144.79
+        + upper_direction * ((theta1) * (upper_servo_data['FULL_FRONT'] - upper_servo_data['FULL_BACK']) / 90)
     )
 
     lower_new_pos = (
         lower_servo_data['NEUTRAL']
-        + lower_direction * ((theta2 - 99.96) * (lower_servo_data['FULL_FRONT'] - lower_servo_data['FULL_BACK']) / 90) # 99.96
+        + lower_direction * ((theta2) * (lower_servo_data['FULL_FRONT'] - lower_servo_data['FULL_BACK']) / 90)
     )
 
     logging.info(f"Moving {leg_name} leg to ({target_x}, {target_y}) -> Upper: {theta1}°, Lower: {theta2}°")

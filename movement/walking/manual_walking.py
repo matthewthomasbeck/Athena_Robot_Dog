@@ -43,19 +43,19 @@ def cycleFrontLeft(min_speed, min_acceleration):
 
     logging.info("Moving FL leg...\n")
 
-    initialize_servos.moveLeg('FL', 7, 13, min_speed, min_acceleration)
+    initialize_servos.moveLeg('FL', 7, 13, 0, min_speed, min_acceleration)
 
     time.sleep(1)
 
-    initialize_servos.moveLeg('FL', 0, 18, min_speed, min_acceleration)
+    initialize_servos.moveLeg('FL', 0, 18, 0, min_speed, min_acceleration)
 
     time.sleep(1)
 
-    initialize_servos.moveLeg('FL', -5, 23, min_speed, min_acceleration)
+    initialize_servos.moveLeg('FL', -5, 23, 0, min_speed, min_acceleration)
 
     time.sleep(1)
 
-    initialize_servos.moveLeg('FL', 0, 18, min_speed, min_acceleration)
+    initialize_servos.moveLeg('FL', 0, 18, 0, min_speed, min_acceleration)
 
     time.sleep(1)
 
