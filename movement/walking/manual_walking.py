@@ -70,7 +70,7 @@ def walkBackward(intensity): # function to oscillate one servo
 
     ##### move legs #####
 
-    cycleFrontLeft(speed, acceleration)
+
 
 ########## WALK FORWARD ##########
 
@@ -82,4 +82,4 @@ def walkForward(intensity): # function to oscillate one servo
 
     ##### move legs #####
 
-    #moveLeg('FL',0, 18, min_speed, min_acceleration)
+    cycleFrontLeft(speed, acceleration)
