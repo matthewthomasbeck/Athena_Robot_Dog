@@ -38,22 +38,40 @@ MAESTRO = createMaestroConnection() # create maestro connection
 
 LEG_CONFIG = { # dictionary of leg configurations
 
-    'FL': {'hip': {'servo': 3, 'FULL_BACK': 1236.50, 'FULL_FRONT': 1892.25, 'NEUTRAL': 1564.375, 'CUR_POS': 1564.375, 'DIR': 0},
-           'upper': {'servo': 5, 'FULL_BACK': 1921.50, 'FULL_FRONT': 1266.00, 'NEUTRAL': 1593.75, 'CUR_POS': 1593.75, 'DIR': 0},
-           'lower': {'servo': 4, 'FULL_BACK': 1872.75, 'FULL_FRONT': 1148.50, 'NEUTRAL': 1510.625, 'CUR_POS': 1510.625, 'DIR': 0}},
+    'FL': {'hip': {'servo': 3, 'FULL_BACK': 1236.50, 'FULL_FRONT': 1892.25, 'NEUTRAL': 1564.375, 'CUR_POS': 1564.375, 'DIR': 1},
+           'upper': {'servo': 5, 'FULL_BACK': 1921.50, 'FULL_FRONT': 1266.00, 'NEUTRAL': 1593.75, 'CUR_POS': 1593.75, 'DIR': -1},
+           'lower': {'servo': 4, 'FULL_BACK': 1872.75, 'FULL_FRONT': 1148.50, 'NEUTRAL': 1510.625, 'CUR_POS': 1510.625, 'DIR': -1}},
 
-    'FR': {'hip': {'servo': 2, 'FULL_BACK': 1613.25, 'FULL_FRONT': 992.00, 'NEUTRAL': 1302.625, 'CUR_POS': 1302.625, 'DIR': 0},
-           'upper': {'servo': 1, 'FULL_BACK': 1310.00, 'FULL_FRONT': 1921.50, 'NEUTRAL': 1615.75, 'CUR_POS': 1615.75, 'DIR': 0},
-           'lower': {'servo': 0, 'FULL_BACK': 1231.75, 'FULL_FRONT': 2000.00, 'NEUTRAL': 1615.875, 'CUR_POS': 1615.875, 'DIR': 0}},
+    'FR': {'hip': {'servo': 2, 'FULL_BACK': 1613.25, 'FULL_FRONT': 992.00, 'NEUTRAL': 1302.625, 'CUR_POS': 1302.625, 'DIR': -1},
+           'upper': {'servo': 1, 'FULL_BACK': 1310.00, 'FULL_FRONT': 1921.50, 'NEUTRAL': 1615.75, 'CUR_POS': 1615.75, 'DIR': 1},
+           'lower': {'servo': 0, 'FULL_BACK': 1231.75, 'FULL_FRONT': 2000.00, 'NEUTRAL': 1615.875, 'CUR_POS': 1615.875, 'DIR': 1}},
 
-    'BL': {'hip': {'servo': 8, 'FULL_BACK': 1623.00, 'FULL_FRONT': 1036.00, 'NEUTRAL': 1329.5, 'CUR_POS': 1329.5, 'DIR': 0},
-           'upper': {'servo': 7, 'FULL_BACK': 2000.00, 'FULL_FRONT': 1354.00, 'NEUTRAL': 1777.0, 'CUR_POS': 1777.0, 'DIR': 0},
-           'lower': {'servo': 6, 'FULL_BACK': 2000.00, 'FULL_FRONT': 1138.75, 'NEUTRAL': 1669.375, 'CUR_POS': 1669.375, 'DIR': 0}},
+    'BL': {'hip': {'servo': 8, 'FULL_BACK': 1623.00, 'FULL_FRONT': 1036.00, 'NEUTRAL': 1329.5, 'CUR_POS': 1329.5, 'DIR': 1},
+           'upper': {'servo': 7, 'FULL_BACK': 2000.00, 'FULL_FRONT': 1354.00, 'NEUTRAL': 1777.0, 'CUR_POS': 1777.0, 'DIR': -1},
+           'lower': {'servo': 6, 'FULL_BACK': 2000.00, 'FULL_FRONT': 1138.75, 'NEUTRAL': 1669.375, 'CUR_POS': 1669.375, 'DIR': -1}},
 
-    'BR': {'hip': {'servo': 11, 'FULL_BACK': 1261.00, 'FULL_FRONT': 1848.25, 'NEUTRAL': 1554.625, 'CUR_POS': 1554.625, 'DIR': 0},
-           'upper': {'servo': 10, 'FULL_BACK': 1065.25, 'FULL_FRONT': 1701.50, 'NEUTRAL': 1283.375, 'CUR_POS': 1283.375, 'DIR': 0},
-           'lower': {'servo': 9, 'FULL_BACK': 1221.75, 'FULL_FRONT': 2000.00, 'NEUTRAL': 1510.875, 'CUR_POS': 1510.875, 'DIR': 0}},
+    'BR': {'hip': {'servo': 11, 'FULL_BACK': 1261.00, 'FULL_FRONT': 1848.25, 'NEUTRAL': 1554.625, 'CUR_POS': 1554.625, 'DIR': -1},
+           'upper': {'servo': 10, 'FULL_BACK': 1065.25, 'FULL_FRONT': 1701.50, 'NEUTRAL': 1283.375, 'CUR_POS': 1283.375, 'DIR': 1},
+           'lower': {'servo': 9, 'FULL_BACK': 1221.75, 'FULL_FRONT': 2000.00, 'NEUTRAL': 1510.875, 'CUR_POS': 1510.875, 'DIR': 1}},
 }
+
+##### servo constraints #####
+
+MAX_VELOCITY = 16383
+MAX_ACCELERATION = 255
+MAX_YAW_RATE = 9.52 # radians per second
+
+##### leg dimensions #####
+
+HIP_OFFSET = 5 # distance from hip axis to center of body
+FEMUR = 11 # length of femur
+TIBIA = 12.25 # length of tibia
+
+##### robot dimensions #####
+
+BODY_WIDTH = 10 # width of robot body from hip axis to hip axis
+BODY_LENGTH = 20 # length of robot body from 'shoulder' axis to 'shoulder' axis (upper femur joint)
+BODY_HEIGHT = 18 # height of robot body from ground to 'shoulder' axis
 
 
 
